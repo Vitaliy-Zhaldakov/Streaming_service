@@ -3,6 +3,6 @@ class VideoProduct( val codeProduct: Int,val codeService:Int,val codeType:Int,va
                    val productionCost:Double? = null, val boxOffice:Double? = null) {
 
     override fun toString(): String {
-        return "Название сервиса:\t$nameProduct\nВозрастной рейтинг :\t\t$ageRating\nСтоимость производства:\t$productionCost\nСборы:\t$boxOffice"
+        return "Название сервиса:$nameProduct\nВозрастной рейтинг:$ageRating\nСтоимость производства:$productionCost\nСборы:$boxOffice\n\n"
     }
 }
