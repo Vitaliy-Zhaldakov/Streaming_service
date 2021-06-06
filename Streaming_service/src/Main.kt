@@ -103,7 +103,7 @@ tailrec fun averageProfit(company : List<Company>, videoProduct: List<VideoProdu
     }
 }
 
-//расчет средней прибыли для компании
+//Расчет средней прибыли для компании
 tailrec fun companEarn(company : Company, videoProduct : List<VideoProduct>,index : Int, countFilms : Int, sumMoney : Double) : Double{
     return if(index < 0) (sumMoney/countFilms)
     else{
@@ -116,6 +116,14 @@ tailrec fun companEarn(company : Company, videoProduct : List<VideoProduct>,inde
 
     }
 }
+//---------------------------------------------------------------------------
+
+//Самый дешевый иностранный сервис
+tailrec fun selectionNumber5(streamingService : List<StreamingService>, index : Int, cheap : StreamingService): StreamingService =
+    if(index >= streamingService.size) cheap else if(streamingService[index].countryService != "Russia" &&
+            streamingService[index].subscriptionPrice < cheap.subscriptionPrice)
+                selectionNumber5(streamingService, index + 1, streamingService[index])
+else selectionNumber5(streamingService, index + 1, cheap)
 //---------------------------------------------------------------------------
 
 fun main(){
