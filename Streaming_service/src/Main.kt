@@ -50,6 +50,74 @@ inline fun<reified T> readFromJsonFile(fileName: String): List<T> {
     return list
 }
 
+//Самый высоко оценённый фильм на кинопоиске
+fun selectNumber1(rate : List<Rate>, videoProduct: List<VideoProduct>){
+    val max = rate.maxByOrNull{it.kinopoiskRate}!!
+    println(videoProduct.find{it.codeProduct == max.codeRating})
+}
+//--------------------------------------------------
+
+//Самый популярный жанр
+//Самый часто встречающий id жанра
+fun selectNumber2(videoProduct: List<VideoProduct>, genre : List<Genre>){
+    println(popularId(videoProduct, genre, genre.size-2, -1,genre[genre.size-1]).nameGenre)
+}
+
+//Находит самый частый id
+tailrec fun popularId(videoProduct: List<VideoProduct>,genre : List<Genre>, index : Int, countGenre : Int, maxGenre : Genre) : Genre {
+    return if(index < 0) maxGenre
+    else{
+        if(popul(videoProduct, genre[index], videoProduct.size-1, 0) > countGenre)
+            popularId(videoProduct, genre, index - 1, popul(videoProduct, genre[index], videoProduct.size-1, 0), genre[index])
+        else popularId(videoProduct, genre, index - 1, countGenre, maxGenre)
+    }
+}
+
+//Находит количество совпадений id жанра с видеопродуктами
+tailrec fun popul(videoProduct: List<VideoProduct>, genr : Genre, index : Int, count : Int) : Int{
+    return if(index < 0) count
+    else {
+        if(videoProduct[index].codeGenre == genr.codeGenre) popul(videoProduct, genr, index - 1, count + 1)
+        else{
+            popul(videoProduct, genr, index - 1, count)
+        }
+    }
+}
+//-------------------------------------------------------------------------------------------------------------------------------------
+
+//Средняя прибыльный каждой компании
+fun selectNumber3(company : List<Company>, videoProduct: List<VideoProduct>){
+    val companyEarn : MutableList<Double> = mutableListOf()
+    println(company.map{it.nameCompany})
+    println(averageProfit(company, videoProduct, companyEarn, 0))
+
+}
+
+//Перебор всех компаний
+tailrec fun averageProfit(company : List<Company>, videoProduct: List<VideoProduct>,companyEarn : MutableList<Double>, index : Int) : MutableList<Double> {
+    return if(index == company.size) companyEarn
+    else {
+        val profit : Double = companEarn(company[index], videoProduct, videoProduct.size - 1, 0, 0.0)
+        companyEarn.add(profit)
+        averageProfit(company, videoProduct,companyEarn, index + 1)
+    }
+}
+
+//расчет средней прибыли для компании
+tailrec fun companEarn(company : Company, videoProduct : List<VideoProduct>,index : Int, countFilms : Int, sumMoney : Double) : Double{
+    return if(index < 0) (sumMoney/countFilms)
+    else{
+        if(company.codeCompany == videoProduct[index].codeCompany){
+             companEarn(company, videoProduct,index - 1, countFilms + 1 , sumMoney + videoProduct[index].boxOffice - videoProduct[index].productionCost)
+        }
+        else {
+            companEarn(company, videoProduct,index - 1, countFilms , sumMoney)
+        }
+
+    }
+}
+//---------------------------------------------------------------------------
+
 fun main(){
 
     val streamingServices = listOf(
@@ -64,7 +132,12 @@ fun main(){
         VideoProduct(2,2,1,7,2,2,"Властелин колец: Возвращение короля",12,93000000.0,897700000.0),
         VideoProduct(3,3,3,8,3,3,"Король лев",6,260000000.0,1656943394.0),
         VideoProduct(4,2,1,1,4,4,"Бойцовский клуб",18,63000000.0,101200000.0),
-        VideoProduct(5,2,1,1,5,5,"Матрица",16, 63000000.0,465300000.0))
+        VideoProduct(5,2,1,1,5,5,"Матрица",16, 63000000.0,465300000.0),
+        VideoProduct(6,1,1,3,6,6,"Брат",16,100000.0,40000.0),
+        VideoProduct(7,1,2,6,7,7,"Ведьмак",18,80000000.0,800000000.0),
+        VideoProduct(8,5,2,3,8,8,"Чернобыль",18,250000000.0,1000000000.0),
+        VideoProduct(9,5,2,6,8,9,"Игра престолов",18,500000000.0,6000000000.0),
+        VideoProduct(10,4,2,5,9,10,"Кремниевая долина",18,350000000.0,900000000.0))
 
     val company = listOf(
         Company(1,"Castle Rock Entertainment","USA"),
@@ -79,7 +152,7 @@ fun main(){
         Genre(3,"Драма"),
         Genre(4,"Мелодрама"),
         Genre(5,"Комедия"),
-        Genre(6,"Фентези"),
+        Genre(6,"Фэнтези"),
         Genre(7,"Приключения"),
         Genre(8,"Анимация"))
 
@@ -88,7 +161,13 @@ fun main(){
         Rate(2, 8.6, 9.1, 9.3),
         Rate(3, 8.8, 8.8, 6.2),
         Rate(4, 8.6, 9.0,7.9 ),
-        Rate(5, 8.5, 9.0, 8.8))
+        Rate(5, 8.5, 9.0, 8.8),
+        Rate(6, 8.2, 8.0, 8.3),//Brat
+        Rate(7, 7.4, 7.3, 9.1),//Witcher
+        Rate(8,8.9, 9.1, 9.8),//Chernobyl
+        Rate(9, 9.0, 8.0,8.5 ),//GameOfThrones
+        Rate(10, 8.3, 8.8, 9.2))//SiliconValley
+
 
     val typeProduct = listOf(
         TypeProduct(1, "Фильм"),
@@ -97,6 +176,7 @@ fun main(){
         TypeProduct(4, "Мультсериал"),
         TypeProduct(5, "TV-Shows"))
 
+    /*
     writeToJson("json/streamingServices.json", streamingServices)
     writeToJson("json/videoProduct.json", videoProduct)
     writeToJson("json/company.json", company)
@@ -112,6 +192,12 @@ fun main(){
     readFromJsonFile<Genre>("json/genre.json").map { println(it) }
     readFromJsonFile<Rate>("json/rate.json").map { println(it) }
     readFromJsonFile<TypeProduct>("json/typeProduct.json").map { println(it) }
+    */
 
+    //selectNumber1(rate,videoProduct)
+
+    //selectNumber2(videoProduct,genre)
+
+    selectNumber3(company, videoProduct)
 
 }
