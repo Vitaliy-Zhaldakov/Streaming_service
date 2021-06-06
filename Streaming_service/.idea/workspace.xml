@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="151ec0bc-435b-4c55-bfaa-4111776e8eec" name="Default Changelist" comment="Add idService" />
+    <list default="true" id="151ec0bc-435b-4c55-bfaa-4111776e8eec" name="Default Changelist" comment="Add idService">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StreamingService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/StreamingService.kt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
