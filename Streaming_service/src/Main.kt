@@ -117,6 +117,13 @@ tailrec fun companEarn(company : Company, videoProduct : List<VideoProduct>,inde
     }
 }
 //---------------------------------------------------------------------------
+//Возрастной рейтинг с самой большой оценкой на Metacritic
+fun selectionNumber4(videoProduct:List<VideoProduct>,rate: List<Rate>):Int =
+    findBestRate(videoProduct,rate,0,0)
+tailrec fun findBestRate(videoProduct: List<VideoProduct>,rate:List<Rate>, maxRate: Int,index: Int):Int =
+    if(index >= videoProduct.size) maxRate
+    else findBestRate(videoProduct,rate,
+        if(rate[index].codeRating == videoProduct[index].codeRating && rate[index].metacriticRate > maxRate)videoProduct[index].ageRating else maxRate,index+1)
 
 //Самый дешевый иностранный сервис
 tailrec fun selectionNumber5(streamingService : List<StreamingService>, index : Int, cheap : StreamingService): StreamingService =
@@ -207,5 +214,5 @@ fun main(){
     //selectNumber2(videoProduct,genre)
 
     selectNumber3(company, videoProduct)
-
+    println(selectionNumber4(videoProduct,rate))
 }
