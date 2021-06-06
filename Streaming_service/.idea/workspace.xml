@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="151ec0bc-435b-4c55-bfaa-4111776e8eec" name="Default Changelist" comment="Edit StreamingService.kt">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StreamingService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/StreamingService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TypeProduct.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/TypeProduct.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/VideoProduct.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/VideoProduct.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
