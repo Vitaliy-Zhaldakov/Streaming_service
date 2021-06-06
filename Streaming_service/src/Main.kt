@@ -47,6 +47,19 @@ inline fun<reified T> readFromJsonFile(fileName: String): List<T> {
     return list
 }
 
-fun main(){
+fun main()
+{
+    val streamingServices = listOf(
+        StreamingService(1, "Netflix", "USA", 599, 148.9),
+        StreamingService(2, "КиноПоиск","Russia", 269, 6),
+        StreamingService(3, "Disney+", "USA", 512, 95),
+        StreamingService(4, "Амедиатека", "Russia", 599, 4),
+        StreamingService(5, "HBO Max", "USA", 1099, 17.2))
 
+    val typeProduct = listOf(
+        TypeProduct(1, "Фильм"),
+        TypeProduct(2, "Сериал"),
+        TypeProduct(3, "Мультфильм"),
+        TypeProduct(4, "Мультсериал"),
+        TypeProduct(5, "TV-Shows"))
 }
