@@ -88,11 +88,18 @@ tailrec fun popul(videoProduct: List<VideoProduct>, genr : Genre, index : Int, c
 //Средняя прибыльный каждой компании
 fun selectNumber3(company : List<Company>, videoProduct: List<VideoProduct>){
     val companyEarn : MutableList<Double> = mutableListOf()
-    println(company.map{it.nameCompany})
-    println(averageProfit(company, videoProduct, companyEarn, 0))
+    printselectNumber3(company, videoProduct , averageProfit(company, videoProduct, companyEarn, 0), company.size - 1)
 
 }
 
+fun printselectNumber3(company : List<Company>, videoProduct: List<VideoProduct>,averageProfit : MutableList<Double>,index : Int){
+    if(index < 0) return
+    else {
+        println(company[index].nameCompany + " общая прибыль = " + averageProfit[index])
+        return printselectNumber3(company, videoProduct, averageProfit, index - 1)
+    }
+
+}
 //Перебор всех компаний
 tailrec fun averageProfit(company : List<Company>, videoProduct: List<VideoProduct>,companyEarn : MutableList<Double>, index : Int) : MutableList<Double> {
     return if(index == company.size) companyEarn
@@ -124,7 +131,8 @@ tailrec fun findBestRate(videoProduct: List<VideoProduct>,rate:List<Rate>, maxRa
     if(index >= videoProduct.size) maxRate
     else findBestRate(videoProduct,rate,
         if(rate[index].codeRating == videoProduct[index].codeRating && rate[index].metacriticRate > maxRate)videoProduct[index].ageRating else maxRate,index+1)
-
+    
+//-------------------------------------------------------------------------
 //Самый дешевый иностранный сервис
 tailrec fun selectionNumber5(streamingService : List<StreamingService>, index : Int, cheap : StreamingService): StreamingService =
     if(index >= streamingService.size) cheap else if(streamingService[index].countryService != "Russia" &&
