@@ -1,5 +1,5 @@
 class TypeProduct(val codeType:Int,val nameType:String) {
     override fun toString(): String {
-        return "Тип продукта$nameType\n\n"
+        return "Тип продукта\t$nameType\n"
     }
 }
