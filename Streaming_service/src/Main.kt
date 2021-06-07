@@ -50,18 +50,18 @@ inline fun<reified T> readFromJsonFile(fileName: String): List<T> {
     return list
 }
 
-//Самый высоко оценённый фильм на кинопоиске
+/*//Самый высоко оценённый фильм на кинопоиске
 fun selectNumber1(rate : List<Rate>, videoProduct: List<VideoProduct>){
     val max = rate.maxByOrNull{it.kinopoiskRate}!!
     println(videoProduct.find{it.codeProduct == max.codeRating})
-}
+}*/
 //--------------------------------------------------
 
 //Самый популярный жанр
 //Самый часто встречающий id жанра
-fun selectNumber2(videoProduct: List<VideoProduct>, genre : List<Genre>){
-    println(popularId(videoProduct, genre, genre.size-2, -1,genre[genre.size-1]).nameGenre)
-}
+fun selectionNumber2(videoProduct: List<VideoProduct>, genre : List<Genre>): Genre =
+    popularId(videoProduct, genre, genre.size-2, -1,genre[genre.size-1])
+
 
 //Находит самый частый id
 tailrec fun popularId(videoProduct: List<VideoProduct>,genre : List<Genre>, index : Int, countGenre : Int, maxGenre : Genre) : Genre {
@@ -134,6 +134,9 @@ tailrec fun findBestRate(videoProduct: List<VideoProduct>,rate:List<Rate>, maxRa
     
 //-------------------------------------------------------------------------
 //Самый дешевый иностранный сервис
+fun selectionNumber5(streamingService: List<StreamingService>) =
+        selectionNumber5(streamingService, 0, streamingService[0])
+        
 tailrec fun selectionNumber5(streamingService : List<StreamingService>, index : Int, cheap : StreamingService): StreamingService =
     if(index >= streamingService.size) cheap else if(streamingService[index].countryService != "Russia" &&
             streamingService[index].subscriptionPrice < cheap.subscriptionPrice)
@@ -199,7 +202,7 @@ fun main(){
         TypeProduct(4, "Мультсериал"),
         TypeProduct(5, "TV-Shows"))
 
-    /*
+    
     writeToJson("json/streamingServices.json", streamingServices)
     writeToJson("json/videoProduct.json", videoProduct)
     writeToJson("json/company.json", company)
@@ -215,12 +218,13 @@ fun main(){
     readFromJsonFile<Genre>("json/genre.json").map { println(it) }
     readFromJsonFile<Rate>("json/rate.json").map { println(it) }
     readFromJsonFile<TypeProduct>("json/typeProduct.json").map { println(it) }
-    */
+    
 
-    //selectNumber1(rate,videoProduct)
+    //Запросы-------------------------------------------------------------------
+    val max = rate.maxByOrNull{it.kinopoiskRate}!!
+    println("Самый высоко оценённый фильм на кинопоиске: \n${videoProduct.find{it.codeProduct == max.codeRating}}")
+    println("Самый популярный жанр: \n${selectionNumber2(videoProduct,genre)}\n")
 
-    //selectNumber2(videoProduct,genre)
-
-    selectNumber3(company, videoProduct)
-    println(selectionNumber4(videoProduct,rate))
+    println("Возрастной рейтинг с самой большой оценкой на Metacritic: ${selectionNumber4(videoProduct, rate)}")
+    println("Самый дешевый иностранный сервис: \n${selectionNumber5(streamingServices)}")
 }
