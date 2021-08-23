@@ -50,100 +50,6 @@ inline fun<reified T> readFromJsonFile(fileName: String): List<T> {
     return list
 }
 
-/*//Самый высоко оценённый фильм на кинопоиске
-fun selectNumber1(rate : List<Rate>, videoProduct: List<VideoProduct>){
-    val max = rate.maxByOrNull{it.kinopoiskRate}!!
-    println(videoProduct.find{it.codeProduct == max.codeRating})
-}*/
-//--------------------------------------------------
-
-//Самый популярный жанр
-//Самый часто встречающий id жанра
-fun selectionNumber2(videoProduct: List<VideoProduct>, genre : List<Genre>): Genre =
-    popularId(videoProduct, genre, genre.size-2, -1,genre[genre.size-1])
-
-
-//Находит самый частый id
-tailrec fun popularId(videoProduct: List<VideoProduct>,genre : List<Genre>, index : Int, countGenre : Int, maxGenre : Genre) : Genre {
-    return if(index < 0) maxGenre
-    else{
-        if(popul(videoProduct, genre[index], videoProduct.size-1, 0) > countGenre)
-            popularId(videoProduct, genre, index - 1, popul(videoProduct, genre[index], videoProduct.size-1, 0), genre[index])
-        else popularId(videoProduct, genre, index - 1, countGenre, maxGenre)
-    }
-}
-
-//Находит количество совпадений id жанра с видеопродуктами
-tailrec fun popul(videoProduct: List<VideoProduct>, genr : Genre, index : Int, count : Int) : Int{
-    return if(index < 0) count
-    else {
-        if(videoProduct[index].codeGenre == genr.codeGenre) popul(videoProduct, genr, index - 1, count + 1)
-        else{
-            popul(videoProduct, genr, index - 1, count)
-        }
-    }
-}
-//-------------------------------------------------------------------------------------------------------------------------------------
-
-//Средняя прибыльный каждой компании
-fun selectNumber3(company : List<Company>, videoProduct: List<VideoProduct>){
-    val companyEarn : MutableList<Double> = mutableListOf()
-    printselectNumber3(company, videoProduct , averageProfit(company, videoProduct, companyEarn, 0), company.size - 1)
-
-}
-
-fun printselectNumber3(company : List<Company>, videoProduct: List<VideoProduct>,averageProfit : MutableList<Double>,index : Int){
-    if(index < 0) return
-    else {
-        println(company[index].nameCompany + " общая прибыль = " + averageProfit[index])
-        return printselectNumber3(company, videoProduct, averageProfit, index - 1)
-    }
-
-}
-//Перебор всех компаний
-tailrec fun averageProfit(company : List<Company>, videoProduct: List<VideoProduct>,companyEarn : MutableList<Double>, index : Int) : MutableList<Double> {
-    return if(index == company.size) companyEarn
-    else {
-        val profit : Double = companEarn(company[index], videoProduct, videoProduct.size - 1, 0, 0.0)
-        companyEarn.add(profit)
-        averageProfit(company, videoProduct,companyEarn, index + 1)
-    }
-}
-
-//Расчет средней прибыли для компании
-tailrec fun companEarn(company : Company, videoProduct : List<VideoProduct>,index : Int, countFilms : Int, sumMoney : Double) : Double{
-    return if(index < 0) (sumMoney/countFilms)
-    else{
-        if(company.codeCompany == videoProduct[index].codeCompany){
-             companEarn(company, videoProduct,index - 1, countFilms + 1 , sumMoney + videoProduct[index].boxOffice - videoProduct[index].productionCost)
-        }
-        else {
-            companEarn(company, videoProduct,index - 1, countFilms , sumMoney)
-        }
-
-    }
-}
-//---------------------------------------------------------------------------
-//Возрастной рейтинг с самой большой оценкой на Metacritic
-fun selectionNumber4(videoProduct:List<VideoProduct>,rate: List<Rate>):Int =
-    findBestRate(videoProduct,rate,0,0)
-tailrec fun findBestRate(videoProduct: List<VideoProduct>,rate:List<Rate>, maxRate: Int,index: Int):Int =
-    if(index >= videoProduct.size) maxRate
-    else findBestRate(videoProduct,rate,
-        if(rate[index].codeRating == videoProduct[index].codeRating && rate[index].metacriticRate > maxRate)videoProduct[index].ageRating else maxRate,index+1)
-    
-//-------------------------------------------------------------------------
-//Самый дешевый иностранный сервис
-fun selectionNumber5(streamingService: List<StreamingService>) =
-        selectionNumber5(streamingService, 0, streamingService[0])
-        
-tailrec fun selectionNumber5(streamingService : List<StreamingService>, index : Int, cheap : StreamingService): StreamingService =
-    if(index >= streamingService.size) cheap else if(streamingService[index].countryService != "Russia" &&
-            streamingService[index].subscriptionPrice < cheap.subscriptionPrice)
-                selectionNumber5(streamingService, index + 1, streamingService[index])
-else selectionNumber5(streamingService, index + 1, cheap)
-//---------------------------------------------------------------------------
-
 fun main(){
 
     val streamingServices = listOf(
@@ -221,10 +127,9 @@ fun main(){
     
 
     //Запросы-------------------------------------------------------------------
-    val max = rate.maxByOrNull{it.kinopoiskRate}!!
-    println("Самый высоко оценённый фильм на кинопоиске: \n${videoProduct.find{it.codeProduct == max.codeRating}}")
-    println("Самый популярный жанр: \n${selectionNumber2(videoProduct,genre)}\n")
-
-    println("Возрастной рейтинг с самой большой оценкой на Metacritic: ${selectionNumber4(videoProduct, rate)}")
-    println("Самый дешевый иностранный сервис: \n${selectionNumber5(streamingServices)}")
+    println("Самый высоко оценённый фильм на кинопоиске: \n${videoProduct.find{it.codeProduct == rate.maxByOrNull{it.kinopoiskRate}!!.codeRating}}")
+    println("Самый популярный жанр: ${genre[videoProduct.groupingBy { it.codeGenre }.eachCount().maxByOrNull { it.value }!!.key - 1].nameGenre}")
+    println("\nСамый прибыльный фильм:\n${videoProduct.filter { it.codeType == (typeProduct.filter { it.nameType == "Фильм" }.map { it.codeType }.first()) }.maxByOrNull { it.boxOffice - it.productionCost }}")
+    println("Возрастной рейтинг с самой большой оценкой на Metacritic: ${videoProduct[rate.maxByOrNull { it.metacriticRate}!!.codeRating - 1].ageRating}")
+    println("\nСамый дешевый иностранный сервис:\n${streamingServices.filter { it.countryService != "Russia" }.minByOrNull { it.subscriptionPrice }}")
 }
